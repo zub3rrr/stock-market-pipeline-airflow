@@ -56,7 +56,22 @@ If in this step everything runs fine and you are able to see your version then y
 
 
 2. Once done then go to project folder
-```cd stock-market-pipeline-airflow
+```
+cd stock-market-pipeline-airflow
+```
+
+
+3. Initialize Airflow (Terminal)
+    ```bash
+    astro dev start (To Start)
+
+    astor dev stop (To Stop)
+    ```
+
+
+
+**Note:** Username = password = admin.
+
 
     
 
