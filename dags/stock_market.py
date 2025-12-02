@@ -1,7 +1,12 @@
 from airflow.decorators import dag, task
 from airflow.sensors.base import PokeReturnValue
 from airflow.hooks.base import BaseHook
+from airflow.operators.python import PythonOperator
 from datetime import datetime
+
+from include.stock_market.tasks import _get_stock_prices
+
+SYMBOL = "NVDA"
 
 @dag(
     start_date=datetime(2023, 1, 1),
@@ -26,8 +31,17 @@ def stock_market():
         except Exception as e:
             return PokeReturnValue(is_done=False, xcom_value=str(e))
         
-        
-    is_api_available()
+
+    get_stock_prices = PythonOperator(
+        task_id = 'get_stock_prices',
+        python_callable = _get_stock_prices,
+        # op_kwargs = {'url': 'https://query1.finance.yahoo.com/v8/finance/chart/','symbol': SYMBOL}
+        op_kwargs = {'url': '{{ti.xcom_pull(task_ids="is_api_available")}}','symbol': SYMBOL}
+    )
+
+    #templating "{{ti.xcom_pull(task_ids="is_api_available")}}" is used to dynamically fetch the URL from the XCom pushed by the is_api_available sensor task.
+
+    is_api_available() >> get_stock_prices
 
 
 stock_market_dag = stock_market()
