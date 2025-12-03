@@ -4,7 +4,7 @@ from airflow.hooks.base import BaseHook
 from airflow.operators.python import PythonOperator
 from datetime import datetime
 
-from include.stock_market.tasks import _get_stock_prices
+from include.stock_market.tasks import _get_stock_prices , _store_prices , BUCKET_NAME
 
 SYMBOL = "NVDA"
 
@@ -41,7 +41,13 @@ def stock_market():
 
     #templating "{{ti.xcom_pull(task_ids="is_api_available")}}" is used to dynamically fetch the URL from the XCom pushed by the is_api_available sensor task.
 
-    is_api_available() >> get_stock_prices
+    store_prices = PythonOperator(
+        task_id='store_prices',
+        python_callable=_store_prices,
+        op_kwargs={'stock': '{{ ti.xcom_pull(task_ids="get_stock_prices") }}'}
+    )
+
+    is_api_available() >> get_stock_prices >> store_prices
 
 
 stock_market_dag = stock_market()
