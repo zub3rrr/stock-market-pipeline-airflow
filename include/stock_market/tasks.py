@@ -39,3 +39,12 @@ def _store_prices(stock):
         length=len(data)
     )
     return f'{objw.bucket_name}/{symbol}'
+
+def _get_formatted_csv(path):
+    client = _get_minio_client()
+    prefix_name = f"{path.split('/')[1]}/formatted_prices/"
+    objects = client.list_objects(BUCKET_NAME, prefix=prefix_name, recursive=True)
+    for obj in objects:
+        if obj.object_name.endswith('.csv'):
+            return obj.object_name
+    return AirflowNotFoundException('The csv file does not exist')
