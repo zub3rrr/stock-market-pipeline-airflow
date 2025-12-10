@@ -1,6 +1,8 @@
 # Stock Market Pipeline Using Apache Airflow
 A scalable end-to-end stock market ETL pipeline orchestrated with Apache Airflow. It extracts real-time and historical data from APIs, applies validation and transformations, and loads clean, analytics-ready datasets to support dashboards, ML models, and financial analysis.
 
+![image alt](https://github.com/zub3rrr/stock-market-pipeline-airflow/blob/2184ce14a05cf7c4698e3730e740d97e02e94d73/extras/Apache%20Airflow_%20Stock%20Market%20Data%20Pipeline%20_%20Analytics.drawio.png)
+
 ## How to do a Project Setup [Easiest Way]
 ### 📌 Prerequisites
 
